@@ -5,10 +5,11 @@
 
 // Database mongodb
 // mongod muss vorher in der Console oder als Service gestartet sein
-var databaseUrl = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb://heroku_jclc1c76:o3huddalcgvin5ds4pdipuj1gm@ds031975.mlab.com:31975/heroku_jclc1c76";
+var databaseUrl = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb://localhost";
 // var databaseUrl = "todolist"; // optional: "username:password@localhost/todolist"
-var collections = ["actions", "categories"]
-var db = require("mongojs").connect(databaseUrl, collections);
+var collections = ["actions", "categories"];
+var mongojs = require("mongojs");
+var db = mongojs('mongodb://heroku_jclc1c76:o3huddalcgvin5ds4pdipuj1gm@ds031975.mlab.com:31975/heroku_jclc1c76', collections)
 
 //  Falls noch keine collection categories existiert, wird automatisch eine angelegt
 db.categories.find().sort({name:1}, function(error, categories) {

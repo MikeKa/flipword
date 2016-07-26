@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());         // pull information from html in POST
 app.use(methodOverride());          // simulate DELETE and PUT
 
-var env = process.env.NODE_ENV || 'development';
+var env = process.env.NODE_ENV || 'production';
 if ('development' == env) {
     var morgan = require('morgan'); // log every request to the console
     var errorHandler = require('errorhandler');

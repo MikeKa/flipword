@@ -18,7 +18,8 @@ app.set('view engine', 'jade');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());         // pull information from html in POST
-app.use(methodOverride());          // simulate DELETE and PUT
+app.use(methodOverride()); // simulate DELETE and PUT
+
 
 var env = process.env.NODE_ENV || 'production';
 if ('development' == env) {

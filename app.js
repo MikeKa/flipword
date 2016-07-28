@@ -19,6 +19,7 @@ app.set('view engine', 'jade');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());         // pull information from html in POST
 app.use(methodOverride()); // simulate DELETE and PUT
+app.use(express.static(__dirname + '/public'));
 
 
 var env = process.env.NODE_ENV || 'production';
@@ -41,7 +42,7 @@ app.post('/remove/:id', routes.remove);
 
 // Server
 http.createServer(app).listen(app.get('port'), function(){
-    console.log('App läuft auf Port '+ app.get('port'));
+    console.log('App Started at Port '+ app.get('port'));
     console.log('URL: http://localhost:'+ app.get('port'));
 
 });

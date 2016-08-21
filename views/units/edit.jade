@@ -1,0 +1,21 @@
+extends layout_edit
+block content
+	div(data-role="page")
+		div(data-role="header", data-position="fixed")
+			h2= title
+			a(href="/home", data-icon="home", data-ajax="false", class="ui-btn-left") Home
+			a(href="/new", data-icon="gear", data-ajax="false", class="ui-btn-right") Edit
+		div(data-role="content")
+			form(method="post", data-ajax="false", action="/save/#{action._id}")
+				a(href="/done/#{action._id}", data-role="button", data-icon="check", data-inline="true") Delete this Unit
+				ul(data-role="listview", data-inset="true")
+					li(data-role="fieldcontain")
+						label(for="number") Number
+						input(id="number", type="number", name="number", value=action.number)
+					li(data-role="fieldcontain")
+						label(for="title") Title
+						input(id="title", type="text", name="title", maxlength="150", value=action.title)
+				input(type="submit", value="Update", data-icon="check", data-inline="true")
+				a(href="/home", data-role="button", data-icon="back",data-rel="back", data-inline="true") Cancel
+		div(data-role="footer", data-position="fixed")
+			h3 &copy; 2016 Starlightwords

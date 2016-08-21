@@ -5,7 +5,8 @@
 // Module
 var express = require('express');
 var app = express();
-var routes = require('./routes');
+var units = require('./routes/units.js');
+var words = require('./routes/words.js');
 var http = require('http');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -31,14 +32,22 @@ if ('development' == env) {
 }
 
 // Routes
-app.get('/', routes.index);
-app.get('/home', routes.index);
-app.get('/new', routes.new);
-app.get('/edit/:id', routes.edit);
-app.get('/delete/:id', routes.delete);
-app.get('/done/:id', routes.done);
-app.post('/save/:id?', routes.save);
-app.post('/remove/:id', routes.remove);
+app.get('/', units.index);
+app.get('/home', units.index);
+app.get('/new', units.new);
+app.get('/units/edit/:id', units.edit);
+app.get('/units/words/:id', units.words);
+app.get('/delete/:id', units.delete);
+app.get('/done/:id', units.done);
+app.post('/save/:id?', units.save);
+app.post('/remove/:id', units.remove);
+app.get('/words', words.index);
+app.get('/words/new', words.new);
+app.get('/words/edit/:id', words.edit);
+app.get('/words/delete/:id', words.delete);
+app.get('/words/done/:id', words.done);
+app.post('/words/save/:id?', words.save);
+app.post('/words/remove/:id', words.remove);
 
 // Server
 http.createServer(app).listen(app.get('port'), function(){

@@ -1,25 +1,25 @@
 //
    Created by awunnenb on 27.11.13.
 
-extends layout
+extends layout_edit
 block content
     h2= title
         form( method="post", data-ajax="false", action="/save")
             ul(data-role="listview", data-inset="true")
                 li(data-role="fieldcontain")
-                    label(for="wordeng") Word (English)
-                    input(id="wordeng", type="text", name="wordeng", maxlength="150")
+                    label(for="number") Number
+                    input(id="number", type="number", name="number")
                 li(data-role="fieldcontain")
-                    label(for="wordrus") Translation (Russian)
-                    input(id="wordrus", type="text", name="wordrus", maxlength="150")
-                li(data-role="fieldcontain")
-                    label(for="lesson") Lesson
-                    select(id="lesson", name="lesson", data-inline="true", data-native-menu="false" )
-                        each item in lessons
-                            option(value="#{item.name}") #{item.name} 
+                    label(for="title") Title
+                    input(id="title", type="text", name="title", maxlength="150")
+
             input(type="submit", value="Submit", data-icon="check", data-inline="true")
             a(href="/home", data-role="button", data-icon="back",data-rel="back", data-inline="true") Cancel
 //                li(data-role="fieldcontain")
+//                    label(for="unit") Unit
+//                  select(id="unit", name="unit", data-inline="true", data-native-menu="false" )
+//                        each item in units
+//                            option(value="#{item.name}") #{item.name} //                li(data-role="fieldcontain")
 //                    label(for="date") Datum
 //                    input(id="datetime", type="datetime-local", data-role="date", name="datetime")
 //                li(data-role="fieldcontain")

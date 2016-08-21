@@ -1,32 +1,32 @@
 /**
  * Created by awunnenb on 27.11.13.
- * Modified by awunneb on 08.06.14.
+ * Modified by MK on 01.0.16.
  */
 
 // Database mongodb
-// mongod muss vorher in der Console oder als Service gestartet sein
+// mongod must be started earlier in the Console or as a service
 var databaseUrl = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb://localhost";
 // var databaseUrl = "todolist"; // optional: "username:password@localhost/todolist"
-var collections = ["actions", "categories"];
+var collections = ["words", "units"];
 var mongojs = require("mongojs");
 var db = mongojs('mongodb://heroku_jclc1c76:o3huddalcgvin5ds4pdipuj1gm@ds031975.mlab.com:31975/heroku_jclc1c76', collections)
 
-//  Falls noch keine collection categories existiert, wird automatisch eine angelegt
-db.categories.find().sort({name:1}, function(error, categories) {
-    if (error || !categories) {
+//  If no collection lessons exist , automatically applied
+db.words.find().sort({name:1}, function(error, words) {
+    if (error || !words) {
         console.log(error);
     } else {
-        if (categories.length != 0) {
-            console.log(categories.length + ' categories found');
+        if (words.length != 0) {
+            console.log(words.length + ' words found');
         } else {
-            defaultCategories = [{'name':'Büro'},{'name':'Rückruf'}, {'name':'Petra'}];
+            defaultwords = [{'name':'word 1'}];
 
-            db.categories.insert(defaultCategories,
+            db.words.insert(defaultwords,
                 function(error){
                     if (error) {
                         console.log(error);
                     } else {
-                        console.log(defaultCategories.length + ' categories created');
+                        console.log(defaultwords.length + ' words created');
                     }
                 });
         }
@@ -34,59 +34,60 @@ db.categories.find().sort({name:1}, function(error, categories) {
 });
 
 
-// Formular Startseite index.jade aufrufen
+
+// Form index.jade call
 exports.index = function(req, res){
-    db.actions.find({status: "aktiv"}, function(error, actions) {
-        if (error || !actions) {
-            console.log("No active actions found");
-            res.render('index', { title: 'Todo Home', actions: null});
+    db.words.find({status: "aktiv"}, function(error, words) {
+        if (error || !words) {
+            console.log("No active words found");
+            res.render('words/index', { title: 'Home', words: null});
         } else {
-            res.render('index', { title: 'Todo Home', actions: actions });
+            res.render('words/index', { title: 'Home', words: words });
         }
     });
 };
 
-// Formular new.jade aufrufen
+// Form new.jade call
 exports.new = function(req, res){
-    db.categories.find().sort({name:1}, function(error, categories) {
-        if (error || !categories) {
-            console.log("No Collection *categories* found!")
+    db.words.find().sort({name:1}, function(error, words) {
+        if (error || !words) {
+            console.log("No Collection *units* found!")
         } else {
-            res.render('new', { title: 'Todo Neu', categories: categories });
+            res.render('/words/new', { title: 'New word', words: words });
         }
     });
 };
 
-// Formular edit.jade aufrufen
+// Form edit.jade call
 exports.edit = function(req, res){
-    db.categories.find().sort({name:1}, function(error, categories) {
-        if (error || !categories) {
-            console.log("No Collection *categories* found!")
+    db.words.find().sort({name:1}, function(error, lessons) {
+        if (error || !lessons) {
+            console.log("No Collection *units* found!")
         } else {
-            db.actions.findOne({"_id": db.ObjectId(req.params.id)}, function (error, action) {
+            db.words.findOne({"_id": db.ObjectId(req.params.id)}, function (error, action) {
                 if (error || !action) {
                     console.log("ID not found");
                 } else {
-                    res.render('edit', { title: 'Todo Bearbeiten', action: action, categories: categories });
+                    res.render('edit', { title: 'Edit word', action: action, lessons: lessons });
                 }
             });
         }
     });
 };
 
-// Formular delete.jade aufrufen
+// Form delete.jade call
 exports.delete = function(req, res){
-    db.actions.findOne({"_id": db.ObjectId(req.params.id)}, function(error, action) {
+    db.words.findOne({"_id": db.ObjectId(req.params.id)}, function(error, action) {
         if (error|| !action) {
             console.log("ID not found");
         } else {
-            // Abfrage ob wirklich gelöscht werden soll
-            res.render('delete', { title: 'Todo Löschen', action: action });
+            // Confirm delete
+            res.render('delete', { title: 'Delete word', action: action });
         }
     });
 };
 
-// Formulardaten speichern
+// Form Update
 exports.save = function(req, res){
     var action = req.body;
     console.log(action);
@@ -95,7 +96,7 @@ exports.save = function(req, res){
     var _id = req.params.id;
     // Update
     if (_id) {
-        db.actions.update({_id: db.ObjectId(_id)}, action,
+        db.words.update({_id: db.ObjectId(_id)}, action,
             function(error){
                 if (error) {
                     console.log(error);
@@ -105,7 +106,7 @@ exports.save = function(req, res){
             });
         // Insert
     } else {
-        db.actions.insert(action,
+        db.words.insert(action,
             function(error){
                 if (error) {
                     console.log(error);
@@ -116,10 +117,10 @@ exports.save = function(req, res){
     }
 };
 
-// Todoeintrag entfernen
+// Remove records
 exports.remove = function(req, res){
     var _id = db.ObjectId(req.params.id);
-    db.actions.remove({_id: _id}, function(error){
+    db.words.remove({_id: _id}, function(error){
         if (error) {
             console.log(error);
         } else {
@@ -128,14 +129,14 @@ exports.remove = function(req, res){
     });
 }
 
-// Status auf erledigt setzen
+// Status set to Done
 exports.done = function(req, res) {
     var _id = db.ObjectId(req.params.id);
-    db.actions.findOne({"_id": _id}, function(error) {
+    db.words.findOne({"_id": _id}, function(error) {
         if (error) {
             console.log("ID not found");
         } else {
-            db.actions.update   ( { _id: _id }, { $set: { status: "erledigt" }});
+            db.words.update   ( { _id: _id }, { $set: { status: "Done" }});
             res.redirect("/home");
         }
     });
